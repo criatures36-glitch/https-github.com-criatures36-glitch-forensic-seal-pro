@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LEX SENTINEL | Forensic Certification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              lexBlack: '#050505',
+              lexGold: '#D4AF37',
+              lexRed: '#880000',
+              lexDarkRed: '#3a0000',
+              lexSilver: '#C0C0C0',
+              lexGreen: '#00ff41',
+            },
+            fontFamily: {
+              serif: ['"Cinzel"', 'serif'],
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+            animation: {
+              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'scan': 'scan 2s linear infinite',
+              'scan-down': 'scan-down 3s linear infinite',
+              'glitch': 'glitch 1s linear infinite',
+              'fade-in': 'fadeIn 0.5s ease-out',
+            },
+            keyframes: {
+              scan: {
+                '0%': { transform: 'translateY(-100%)' },
+                '100%': { transform: 'translateY(100%)' },
+              },
+              'scan-down': {
+                '0%': { top: '0%', opacity: 0 },
+                '10%': { opacity: 1 },
+                '90%': { opacity: 1 },
+                '100%': { top: '100%', opacity: 0 },
+              },
+              glitch: {
+                '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                '62%': { transform: 'translate(0,0) skew(5deg)' },
+              },
+              fadeIn: {
+                '0%': { opacity: 0, transform: 'translateY(10px)' },
+                '100%': { opacity: 1, transform: 'translateY(0)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <script>
+      // Interactive Cyberpunk FX: Track Mouse Position
+      document.addEventListener('DOMContentLoaded', () => {
+        const root = document.documentElement;
+        document.addEventListener('mousemove', (e) => {
+          // Normalize coordinates (0 to 1)
+          const x = e.clientX / window.innerWidth;
+          const y = e.clientY / window.innerHeight;
+          
+          root.style.setProperty('--mouse-x', x);
+          root.style.setProperty('--mouse-y', y);
+        });
+      });
+    </script>
+    <style>
+      :root {
+        --bg-color: #f9fafb; /* Gray 50 */
+        --text-color: #111827; /* Gray 900 */
+        --mouse-x: 0.5;
+        --mouse-y: 0.5;
+      }
+      .dark {
+        --bg-color: #050505;
+        --text-color: #e5e5e5;
+      }
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0a0a0a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border: 1px solid #D4AF37;
+      }
+      
+      /* CRT & GOD MODE EFFECTS */
+      .scanline {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.4;
+        background: 
+          /* 1. Base Scanlines (Horizontal Lines) */
+          linear-gradient(
+            to bottom,
+            rgba(255,255,255,0),
+            rgba(255,255,255,0) 50%,
+            rgba(0,0,0,0.2) 50%,
+            rgba(0,0,0,0.2)
+          ),
+          /* 2. Interactive Spotlight (Tracks Mouse) - Simulates Electron Gun Focus */
+          radial-gradient(
+            circle at calc(var(--mouse-x) * 100%) calc(var(--mouse-y) * 100%),
+            rgba(255, 255, 255, 0.05) 0%, 
+            transparent 25%
+          );
+        background-size: 100% 4px, 100% 100%;
+        mix-blend-mode: overlay;
+      }
+
+      /* Rolling Refresh Bar (Automatic) */
+      .scanline::before {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0) 50%, 
+          rgba(0, 0, 0, 0.25) 50%
+        ); 
+        background-size: 100% 8px; /* Slightly larger lines */
+        animation: scrollScanline 10s linear infinite;
+        opacity: 0.1;
+      }
+
+      /* Interference Line (Tracks Mouse Y) */
+      .scanline::after {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0; left: 0; bottom: 0; right: 0;
+        background: linear-gradient(
+          to bottom,
+          transparent calc(var(--mouse-y) * 100% - 2px),
+          rgba(0, 255, 65, 0.2) calc(var(--mouse-y) * 100%), /* Green Glitch Line */
+          transparent calc(var(--mouse-y) * 100% + 2px)
+        );
+        z-index: 10000;
+        opacity: 0.3;
+      }
+
+      @keyframes scrollScanline {
+        0% { background-position: 0 0; }
+        100% { background-position: 0 100%; }
+      }
+      
+      .text-glow {
+        text-shadow: 0 0 5px currentColor;
+      }
+      
+      .crt-flicker {
+        animation: flicker 0.15s infinite;
+      }
+
+      @keyframes flicker {
+        0% { opacity: 0.97; }
+        5% { opacity: 0.95; }
+        10% { opacity: 0.9; }
+        15% { opacity: 0.95; }
+        20% { opacity: 0.99; }
+        50% { opacity: 0.95; }
+        55% { opacity: 0.9; }
+        60% { opacity: 0.99; }
+        75% { opacity: 0.96; }
+        100% { opacity: 1; }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "crypto-js": "https://aistudiocdn.com/crypto-js@^4.2.0",
+    "ethers": "https://aistudiocdn.com/ethers@^6.15.0",
+    "pdf-lib": "https://aistudiocdn.com/pdf-lib@^1.17.1",
+    "qrcode": "https://aistudiocdn.com/qrcode@^1.5.4",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
